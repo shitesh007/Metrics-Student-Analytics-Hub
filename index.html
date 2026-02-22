@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KPI Report – Student Productivity & Digital Distraction</title>
+  <meta name="description" content="Interactive KPI dashboard analyzing 20,000 students' productivity metrics and digital distraction patterns." />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ── Loading Overlay ─────────────────────────────────────── -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <p class="loader-text">Loading 20,000 student records…</p>
+</div>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-left">
+    <h1>📊 Student Productivity &amp; Digital Distraction</h1>
+    <p>Interactive KPI Report Dashboard — explore how screen time, sleep, and study habits shape academic outcomes</p>
+  </div>
+  <div class="header-meta">
+    <div class="badge">🎓 Total Students: <span id="total-badge">—</span></div>
+    <div class="badge">📅 Dataset: 2024</div>
+    <div class="badge">⚡ 18 KPI Metrics</div>
+  </div>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Filter Bar -->
+  <div class="filter-bar" role="search" aria-label="Dashboard filters">
+    <div class="filter-group">
+      <label for="filter-gender">Gender</label>
+      <select id="filter-gender">
+        <option value="All">All Genders</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-age">Age Group</label>
+      <select id="filter-age">
+        <option value="All">All Ages</option>
+        <option value="≤18">≤ 18</option>
+        <option value="19-21">19 – 21</option>
+        <option value="22-25">22 – 25</option>
+        <option value="26+">26 +</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-stress">Stress Level</label>
+      <select id="filter-stress">
+        <option value="All">All Levels</option>
+        <option value="1">1 – Very Low</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5 – Moderate</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10 – Very High</option>
+      </select>
+    </div>
+    <button class="btn-reset" id="btn-reset">↺ Reset Filters</button>
+    <p class="filter-status">Showing <strong>—</strong> students</p>
+  </div>
+
+  <!-- ── KPI Cards ─────────────────────────────────────────── -->
+  <h2 class="section-title">Key Performance Indicators</h2>
+  <div class="kpi-grid">
+
+    <div class="kpi-card" style="--c1:hsl(258,80%,65%);--c2:hsl(195,90%,55%)">
+      <span class="kpi-icon">🎯</span>
+      <div class="kpi-label">Avg Productivity</div>
+      <div class="kpi-value" id="kpi-productivity">—</div>
+      <div class="kpi-sub">out of 100</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(145,70%,52%);--c2:hsl(175,80%,50%)">
+      <span class="kpi-icon">🏆</span>
+      <div class="kpi-label">Avg Final Grade</div>
+      <div class="kpi-value" id="kpi-grade">—</div>
+      <div class="kpi-sub">out of 100</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(195,90%,55%);--c2:hsl(258,80%,65%)">
+      <span class="kpi-icon">📚</span>
+      <div class="kpi-label">Avg Study Hours</div>
+      <div class="kpi-value" id="kpi-study">—</div>
+      <div class="kpi-sub">hrs / day</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(28,90%,62%);--c2:hsl(330,80%,62%)">
+      <span class="kpi-icon">📱</span>
+      <div class="kpi-label">Avg Phone Usage</div>
+      <div class="kpi-value" id="kpi-phone">—</div>
+      <div class="kpi-sub">hrs / day</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(330,80%,62%);--c2:hsl(258,80%,65%)">
+      <span class="kpi-icon">😴</span>
+      <div class="kpi-label">Avg Sleep Hours</div>
+      <div class="kpi-value" id="kpi-sleep">—</div>
+      <div class="kpi-sub">hrs / day</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(175,80%,50%);--c2:hsl(145,70%,52%)">
+      <span class="kpi-icon">🧠</span>
+      <div class="kpi-label">Avg Focus Score</div>
+      <div class="kpi-value" id="kpi-focus">—</div>
+      <div class="kpi-sub">out of 100</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(42,95%,62%);--c2:hsl(28,90%,62%)">
+      <span class="kpi-icon">📅</span>
+      <div class="kpi-label">Avg Attendance</div>
+      <div class="kpi-value" id="kpi-attendance">—</div>
+      <div class="kpi-sub">of classes attended</div>
+    </div>
+
+    <div class="kpi-card" style="--c1:hsl(0,78%,62%);--c2:hsl(28,90%,62%)">
+      <span class="kpi-icon">✅</span>
+      <div class="kpi-label">Avg Assignments Done</div>
+      <div class="kpi-value" id="kpi-assignments">—</div>
+      <div class="kpi-sub">out of 19 max</div>
+    </div>
+
+  </div><!-- /kpi-grid -->
+
+  <!-- ── Charts ────────────────────────────────────────────── -->
+  <h2 class="section-title">Analytics &amp; Insights</h2>
+  <div class="charts-grid">
+
+    <!-- C1: Productivity Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Productivity Score Distribution</div>
+      <div class="chart-subtitle">How students spread across productivity bands (0–100)</div>
+      <div class="chart-wrap"><canvas id="c1"></canvas></div>
+    </div>
+
+    <!-- C2: Study Hours vs Final Grade -->
+    <div class="chart-card">
+      <div class="chart-title">Study Hours vs Final Grade</div>
+      <div class="chart-subtitle">Scatter plot coloured by gender — sampled 800 students</div>
+      <div class="chart-wrap"><canvas id="c2"></canvas></div>
+    </div>
+
+    <!-- C3: Phone Usage vs Productivity -->
+    <div class="chart-card">
+      <div class="chart-title">Phone Usage vs Productivity Score</div>
+      <div class="chart-subtitle">Does more screen time hurt performance? — sampled 800 students</div>
+      <div class="chart-wrap"><canvas id="c3"></canvas></div>
+    </div>
+
+    <!-- C4: KPIs by Gender -->
+    <div class="chart-card">
+      <div class="chart-title">Avg KPIs by Gender</div>
+      <div class="chart-subtitle">Comparing Productivity, Grade, Focus, and Attendance across genders</div>
+      <div class="chart-wrap"><canvas id="c4"></canvas></div>
+    </div>
+
+    <!-- C5: Stress Level vs Focus/Productivity -->
+    <div class="chart-card">
+      <div class="chart-title">Stress Level vs Focus &amp; Productivity</div>
+      <div class="chart-subtitle">How stress (1–10) correlates with cognitive performance</div>
+      <div class="chart-wrap"><canvas id="c5"></canvas></div>
+    </div>
+
+    <!-- C6: Digital Distraction by Age Group (wide) -->
+    <div class="chart-card wide">
+      <div class="chart-title">Digital Distraction Breakdown by Age Group</div>
+      <div class="chart-subtitle">Average daily hours spent on Social Media, YouTube and Gaming — stacked by age group</div>
+      <div class="chart-wrap"><canvas id="c6"></canvas></div>
+    </div>
+
+    <!-- C7: Sleep vs Productivity -->
+    <div class="chart-card">
+      <div class="chart-title">Sleep Hours vs Productivity Score</div>
+      <div class="chart-subtitle">Does getting more sleep boost performance? — sampled 800 students</div>
+      <div class="chart-wrap"><canvas id="c7"></canvas></div>
+    </div>
+
+    <!-- C8: Attendance vs Final Grade -->
+    <div class="chart-card">
+      <div class="chart-title">Attendance % vs Final Grade</div>
+      <div class="chart-subtitle">Relationship between class attendance and academic results — sampled 800 students</div>
+      <div class="chart-wrap"><canvas id="c8"></canvas></div>
+    </div>
+
+  </div><!-- /charts-grid -->
+
+  <!-- ── Data Table ─────────────────────────────────────────── -->
+  <h2 class="section-title">Student Records</h2>
+  <section class="table-section" aria-label="Student data table">
+    <div class="table-toolbar">
+      <input type="search" id="table-search" class="table-search"
+             placeholder="🔍 Search by ID, gender, age…" aria-label="Search student records" />
+      <span class="table-info" id="table-info">—</span>
+    </div>
+    <div class="table-wrap">
+      <table role="grid" aria-label="Student productivity data">
+        <thead><tr id="thead-row"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination" role="navigation" aria-label="Table pagination"></div>
+  </section>
+
+</main><!-- /main -->
+
+<!-- ── Footer ──────────────────────────────────────────────── -->
+<footer class="footer">
+  KPI Report &nbsp;·&nbsp; Student Productivity &amp; Digital Distraction Dataset &nbsp;·&nbsp; 20,000 Records &nbsp;·&nbsp; Built with Chart.js
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

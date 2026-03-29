@@ -20,8 +20,8 @@ from dotenv import load_dotenv
 load_dotenv()  # reads .env from the current working directory
 
 DB_HOST     = os.getenv("DB_HOST", "localhost")
-DB_USER     = os.getenv("DB_USER", "user")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Shitesh007")
+DB_USER     = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
 DB_NAME     = os.getenv("DB_NAME", "student_analytics")
 DB_PORT     = os.getenv("DB_PORT", "3306")
 
@@ -120,7 +120,7 @@ df = df[
 ]
 
 # ── 6. Header ──────────────────────────────────────────────────────────────────
-st.title("🎓 Student Productivity & Distraction KPI Dashboard")
+st.title("🎓 NexMetrics: Student Analytics Hub")
 st.caption(
     f"Showing **{len(df):,}** of **{len(df_raw):,}** students "
     f"| Gender: `{selected_gender}` | Sleep: `{sleep_range[0]}–{sleep_range[1]} hrs`"

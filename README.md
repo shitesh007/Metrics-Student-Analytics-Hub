@@ -1,4 +1,4 @@
-# KPI Report – Student Productivity & Digital Distraction
+# 📊 NexMetrics — Student Productivity & Performance Hub
 
 This repository contains an interactive KPI report examining how screen time, sleep habits, study behavior, and other factors relate to academic performance for 20 000 students. Two dashboard versions are included:
 
